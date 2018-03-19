@@ -4,10 +4,13 @@ Duration : 5 min
 
 # Exercise 1: Installing Helm
 
-This exercise will guide you through installing Helm and explore its components.
+This exercise will guide you through installing Helm and exploring its components.
 
-1. Follow the instructions on the [installation page](https://docs.helm.sh/using_helm/#installing-helm) to install the latest release of Helm client for your OS.
-2. Inspect that Helm has been successfully installed by running the helm version command:
+1. Follow the instructions on the [installation page](https://docs.helm.sh/using_helm/#installing-helm) to install `v2.8.1` of Helm client for your OS.
+
+> The latest Helm release (v2.8.2) has a bug that prevents a task in exercise 5 from working.
+
+2. Verify that Helm has been successfully installed by running the helm version command:
 ```
 $ helm version
 ```
@@ -31,6 +34,7 @@ $ helm version
   ```
   The first two commands create a service account named `tiller` in the `kube-system`namespace with the permissions of a cluster admin.
   The `helm init` command initializes the Helm client on your machine by setting the HELM_HOME directory and installs the Tiller in your cluster. The `--service-account tiller` flag tells helm to use the `tiller` service account which allows helm access to the kube-system namespace.
+
 4. `HELM_HOME`is directory used by the Helm client to  store information about plugins and repositories, etc. You can find its location by running:
 ```
 helm home
@@ -38,10 +42,10 @@ helm home
 5. Happy Helming!! You are all set now, but let's inspect what has actually happened in the cluster:
 ```
 # listing all pods in the kube-system namespace
-kubectl get pods --namespace kube-system
+kubectl get pods -n kube-system
 ```
 You should see Tiller pod deployed as `tiller-deploy-xxxxxxxxxx-xxxxx`.
 You can inspect the tiller logs:
 ```
-kubectl logs --namespace kube-system <tiller-deploy-full-pod-name>
+kubectl logs -n kube-system <tiller-deploy-full-pod-name>
 ```

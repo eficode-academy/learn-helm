@@ -4,7 +4,9 @@ Duration : 10 min
 
 # Exercise 5: Deploying charts from code with helmsman
 
-Now it's time to deploy charts to our cluster from code. [Helmsman](https://github.com/Praqma/helmsman) is a `Helm-Charts-as-Code` tool which takes a desired state of charts deployment in your cluster and achieves that state.
+Now it's time to deploy charts to our cluster from code. [Helmsman](https://github.com/Praqma/helmsman) is a `Helm-Charts-as-Code` tool which takes a desired state of charts deployment in your cluster and makes it happen.
+
+> This exercise will not work from Windows since Helmsman is not available yet on Windows. If you have Windows 10 with docker installed, you can complete this exercise using Helmsman's docker container. More details [here](helmsman_on_windows.md).
 
 We will use an [example desired state file (DSF)](helmsman/dsf.toml) which describes our desire to have kubernetes dashborad installed in the `default` namespace and our own helm-echoserver chart installed in the `playground` namespace.
 
@@ -17,7 +19,6 @@ So let's get down to it:
 ```
 curl -L https://github.com/Praqma/helmsman/releases/download/v1.0.2/helmsman_1.0.2_linux_amd64.tar.gz | tar zx
 mv helmsman /bin/helmsman
-chmod +x /bin/helmsman
 ```
 
 2. Verify Helmsman is ready to use:
@@ -29,13 +30,16 @@ helmsman -v
 3. Let's run Helmsman with our example DSF:
 
 > Make sure to replace the kubeContext name in helmsman/dsf.toml with your context name
+> Make sure your local helm repo is still serving charts on localhost (using `helm serve`)
+
 ```
-helmsman -debug -f helmsman/dsf.toml
+cd helmsman
+helmsman -debug -f dsf.toml
 ```
 This should generate a plan for you but not execute it. If all is good, you can apply the plan:
 
 ```
-helmsman -debug -apply -f helmsman/dsf.toml
+helmsman -debug -apply -f dsf.toml
 ```
 
 4. Now you should have both kubernetes-dashboard and helm-echoserver deployed in your cluster. Verify with the following commands:
@@ -72,7 +76,7 @@ purge = false
 - Now run helmsman again:
 
 ```
-helmsman -debug -apply -f helmsman/dsf.toml
+helmsman -debug -apply -f dsf.toml
 
 # check deployed helm releases
 helm list
@@ -81,7 +85,7 @@ helm list
 helm list --deleted
 ```
 
-6. Now it's your turn to take the helm. Try making the following changes and running helmsman after each change and see what happens:
+6. Now it's your turn to take the helm. Try making the following changes and running helmsman after each change and see what happens (using `helm list`):
 
 - Change the kubernetes-dashboard `enabled` flag back to `true`
 - Change the namespace for one of the applications, and why not add a new namespace in the namespaces section.

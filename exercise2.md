@@ -27,20 +27,33 @@ helm install --name my-release stable/jenkins
 ```
 # to list all releases deployed in the cluster
 helm list
+
 # to get the k8s manifest(s) for a release
 helm get my-release
+
 # to view pods, services and ingresses in the default namespace
-kubectl get pods,svc,ing
+kubectl get pods,svc
 ```
+
 4. We installed the jenkins release with default values, now let's upgrade our release with some custom config values:
 ```
 helm upgrade --set fullnameOverride=dcn-jenkins my-release stable/jenkins
 ```
-The command above will change the names of the k8s resources created by this chart to `dcn-jenkins`. You can see all the values you could configure for the jenkins chart [here](https://github.com/kubernetes/charts/tree/master/stable/jenkins#jenkins-master).
+The command above will change the names of the k8s resources created by this chart to `dcn-jenkins`. Check the names of the jenkins pods and services to verify that the new name is now being used. You can check all the values you could configure for the jenkins chart [here](https://github.com/kubernetes/charts/tree/master/stable/jenkins#jenkins-master).
 
 > Tip: you can also create a custom values.yaml file with your customized values and use it to override the defaults:  helm install --name my-release -f my_custom_values.yaml stable/jenkins
 
-5. Let's delete our jenkins release:
+5. Let's rollback our jenkins release to the first version:
+
+```
+# get the histroy of a release
+helm history my-release
+
+# rollback revision (version) number 1 of 'my-release'
+helm rollback my-release 1
+```
+
+6. Let's delete our jenkins release:
 ```
 helm delete my-release
 ```
@@ -49,13 +62,7 @@ Although the delete command removes all k8s resources created but it does not de
 ```
 # list deleted releases
 helm list --deleted
-# get the histroy of a release
-helm history my-release
-```
-6. Now, we can either `rollback` the deleted release or `purge`delete it.
-```
-# rollback revision number 1 of 'my-release'
-helm rollback my-release 1
+
 # purge delete 'my-release' i.e. delete its k8s resource and/or history
 helm delete --purge my-release
 ```

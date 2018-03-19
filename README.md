@@ -3,6 +3,9 @@
 This respository contains a Helm tutorial designed for a workshop at the Day of Cloud Native, Oslo, March 2018.
 The tutorial contains the following exercises:
 
+The duration provided in each exercise is for guidance only.
+
+
 - [Exercise 1: Installing Helm](exercise1.md)
 - [Exercise 2: Working with Helm charts](exercise2.md)
 - [Exercise 3: Building your own chart](exercise3.md)

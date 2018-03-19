@@ -5,7 +5,7 @@ event = "DCN-Oslo2018"
 [settings]
 # replace the context name below with your DCN cluster context
 # Tip: you can find your context by running: kubectl config get-contexts
-kubeContext = "gke_praqma-education_europe-west1-b_dcn-cluster-XXX"
+kubeContext = "gke_praqma-education_europe-west1-b_dcn-cluster-3"
 
 # define your k8s namespaces. If they don't exist, helmsman will attempt to create them
 # syntax: environment_name = "k8s_namespace"
@@ -27,7 +27,7 @@ local = "http://127.0.0.1:8879/charts"
 [apps.kubernetes-dashboard]
 name = "kubernetes-dashboard" # should be unique across all apps
 description = "stable/kubernetes-dashboard"
-namespace = "default" # maps to the namespace as defined in namespaces above
+namespace = "playground" # maps to the namespace as defined in namespaces above
 enabled = true # change to false if you want to delete this release [default is flase]
 chart = "stable/kubernetes-dashboard" # chart name (repo/chart)
 version = "0.4.4" # chart version
