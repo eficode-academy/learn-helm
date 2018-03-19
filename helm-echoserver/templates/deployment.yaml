@@ -1,0 +1,58 @@
+apiVersion: apps/v1beta1  # for k8s versions after 1.9.0 use apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+{{- include "helm-echoserver-chart.labels" . | indent 2 }}
+spec:
+  replicas: {{ .Values.Replicas | default 1 }}    ## number of replicas - default 1
+  selector:
+    matchLabels:
+      {{ include "app-unique-selector-label" . }}
+  template:
+    metadata:
+      labels:
+        {{ include "app-unique-selector-label" . }}
+    spec:
+      containers:
+      # [start of helm-echoserver  container]
+      - name: {{ required "A container name is required!" .Values.ContainerName }}
+        image: {{ .Values.Image.Name }}:{{ .Values.Image.Tag }}
+        imagePullPolicy: {{ .Values.Image.ImagePullPolicy | default "Always" }}
+        ports:
+        - containerPort: {{ .Values.ContainerPort }}
+        env:
+        - name: PORT
+          value: {{ .Values.ContainerPort | quote }}
+        - name: CUSTOME_ENV_VAR1
+          value: {{ .Values.EnvVars.CUSTOME_ENV_VAR1 | lower | default "default env var 1." | quote }}
+        - name: CUSTOME_ENV_VAR2
+          value: {{ .Values.EnvVars.CUSTOME_ENV_VAR2 | lower | default "default env var 2." | quote }}
+        # exposing pod info as env variables using k8s downward API for demo purposes
+        # https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        # exposing Helm info as env variables for demo purposes
+        # see https://docs.helm.sh/chart_template_guide/#built-in-objects
+        - name: HELM_CHART_NAME
+          value: {{ .Chart.Name }}
+        - name: HELM_CHART_VERSION
+          value: {{ .Chart.Version }}
+        - name: HELM_RELEASE
+          value: {{ .Release.Name }}        
+
+      # [end of helm-echoserver container]

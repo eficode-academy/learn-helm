@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ .Release.Name }}-echo-post-install-{{ randAlphaNum 3 | lower }}
+  labels:
+    {{- include "helm-echoserver-chart.labels" . | indent 4 }}
+  annotations:
+    # This is what defines this resource as a hook. Without this line, the
+    # pod is considered part of the release.
+    "helm.sh/hook": post-install, post-upgrade
+    "helm.sh/hook-weight": "-4"
+    # the commented directive below instructs helm to cleanup (delete the hook resource upon successful deployment),
+    # we disable it so that we can see the pod (and its logs) after it terminates.
+    # "helm.sh/hook-delete-policy": hook-succeeded
+spec:
+  containers:
+  # [start of alpine container]
+  - name: echo
+    image: pstauffer/curl:latest
+    imagePullPolicy: IfNotPresent
+
+    command: ["/bin/sh", "-c"]
+    args:
+      - |
+        sleep {{ .Values.Post_install.delay }}
+        curl -F "message=POST INSTALLING MESSAGE SENT BY '${HOSTNAME}'----> {{ .Values.Post_install.message | lower }}" {{ .Release.Name }}.{{ .Release.Namespace }}.svc.cluster.local:{{ .Values.Service.Port }}/content
+  restartPolicy: OnFailure
+  # [end of alpine container]
