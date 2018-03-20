@@ -6,7 +6,7 @@ Duration : 5 min
 
 This exercise will guide you through installing Helm and exploring its components.
 
-1. Follow the instructions on the [installation page](https://docs.helm.sh/using_helm/#installing-helm) to install `v2.8.1` of Helm client for your OS.
+1. Follow the instructions on the [installation page](https://docs.helm.sh/using_helm/#from-the-binary-releases) to install `v2.8.1` of Helm client for your OS.
 
 > The latest Helm release (v2.8.2) has a bug that prevents a task in exercise 5 from working.
 
