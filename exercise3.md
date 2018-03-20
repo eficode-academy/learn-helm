@@ -42,7 +42,6 @@ The above command generates the compressed chart `<chart-name>-<chart-version>.t
 3. Horray! Our chart is ready. Let's install :
 
 ```
-# this command may take a couple of minutes while waiting for the LoadBalancer to become ready.
 helm install --name echoserver helm-echoserver-0.1.0.tgz --set Post_install.delay=50,Post_install.message="<your custom message here>" --wait
 ```
 

@@ -87,7 +87,7 @@ helm list --deleted
 
 6. Now it's your turn to take the helm. Try making the following changes and running helmsman after each change and see what happens (using `helm list`):
 
-- Change the kubernetes-dashboard `enabled` flag back to `true`
+- Change the kubernetes-dashboard `enabled` flag back to `true` (This will fail if you are using helm v2.8.2 due to a bug).
 - Change the namespace for one of the applications, and why not add a new namespace in the namespaces section.
 - Why not add another app to the apps section. Choose any public chart from [kubeapps](https://hub.kubeapps.com/)
 - Change the values files for any of the charts you have (e.g, change the kubernetes-dashboard image tag).
