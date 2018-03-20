@@ -24,6 +24,6 @@ Post_install:
   delay: 30 # seconds to wait before the message is sent
 
 Service:
-  Type: LoadBalancer
+  Type: NodePort
   Port: 8888
   Protocol: TCP

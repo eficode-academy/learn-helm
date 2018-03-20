@@ -20,9 +20,14 @@ helm repo list
 To install a release, we will use the `install` command:
 ```
 # install a release named 'my-release' of the jenkins chart from the stable repository.
-helm install --name my-release stable/jenkins
+helm install --name my-release stable/jenkins --set Master.ServiceType=NodePort
 ```
-2. Congratualtions! You have installed your first release! Let's test the installed jenkins. Follow the instructions you got on the terminal after executing the install command to extract the admin password and login to your jenkins in your browser.
+2. Congratualtions! You have installed your first release! Let's test the installed jenkins. Follow the instructions you got on the terminal after executing the install command to extract the admin password and login to your jenkins in your browser. Note the bug below in the instructions:
+
+> The following command suggested by the jenkins chart is wrong (it get internal IP not the external one)
+> `export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")`
+> replace `addresses[0]` with `addresses[1]` to get the external IP.
+
 3. Horray! you have jenkins up and running! Let's inspect what happended in the cluster:
 ```
 # to list all releases deployed in the cluster

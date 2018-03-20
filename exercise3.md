@@ -51,9 +51,9 @@ helm install --name echoserver helm-echoserver-0.1.0.tgz --set Post_install.dela
 
 If all goes well, the last command results in a list of resources created by the chart and instructions to access the helm-echoserver (these instructions come from helm-echoserver/templates/NOTES.txt).
 
-4. Follow the instrctions to obtain the application IP
+4. Follow the instrctions from the helm-echoserver chart to obtain the application IP.
 
-5. Let's browse to our helm-echoserver on `http://<LoadBalancer_IP>:8888/content`
+5. Let's browse to our helm-echoserver on `http://<Node_IP>:8888/content`
 This should initially show `A default content line.` and soon should have a second line with your custom message (if its not already there, keep refreshing your browser till you get it).
 
-6. Now check `http://<LoadBalancer_IP>:8888/` to see information about the helm-echoserver.
+6. Now check `http://<Node_IP>:8888/` to see information about the helm-echoserver.
