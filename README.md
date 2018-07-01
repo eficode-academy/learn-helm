@@ -1,9 +1,6 @@
-# Helm workshop - DCN 2018
+# Learn Helm
 
-This respository contains a Helm tutorial designed for a workshop at the Day of Cloud Native, Oslo, March 2018.
-The tutorial contains the following exercises:
-
-The duration provided in each exercise is for guidance only.
+This repository contains a set of exercises for learning [Helm](https://helm.sh) step by step.
 
 
 - [Exercise 1: Installing Helm](exercise1.md)
