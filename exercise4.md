@@ -1,7 +1,3 @@
----
-Duration : 5 min
----
-
 # Exercise 4: Serving your charts
 
 You can setup helm repositories to serve your charts in many possible ways. In this exercise, we will serve the chart which we created in [exercise 3](exercise3.md) locally (on localhost).
@@ -20,7 +16,7 @@ helm serve
 helm search local
 ```
 
-That was all. Now our helm-echoserver chart can be installed as `local/helm-echoserver`.
+That was all. Now our helm-echoserver chart can be installed as `local/echoserver`.
 
 
 ## Clean up

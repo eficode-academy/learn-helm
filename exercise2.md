@@ -1,66 +1,86 @@
----
-Duration : 15 min
----
-
 # Exercise 2: Working with Helm charts
 
 Now that you have Helm installed, it's time to install our first release and do some basic operations on it.
 
 > A release is an installed instance of a Helm chart.
 
-> Official Charts are published into two public repositories (stable & incubator). But other charts can be found from other public repositories.
-
 >The [Kube Apps hub](https://hub.kubeapps.com/) provides a list of official charts. While the source code of these charts is hosted on the [Kubernetes project](https://github.com/kubernetes/charts).
 
-1. We will install `Jenkins` from the `stable` official repository. Helm comes preconfigured to see the two official repos (stable & incubator) and we can verify it by running:
-```
-# listing all configured repos in your helm client
-helm repo list
-```
+
+## Installing a Chart
+
+1. We will install `kube-ops-view` from the `stable` official repository. You can install your favourite chart though.
 To install a release, we will use the `install` command:
 ```
-# install a release named 'my-release' of the jenkins chart from the stable repository.
-helm install --name my-release stable/jenkins --set Master.ServiceType=NodePort
+# install a release named 'ops-view' of the kube-ops-view chart from the stable repository.
+helm install --name=ops-view stable/kube-ops-view --set rbac.create=true
 ```
-2. Congratualtions! You have installed your first release! Let's test the installed jenkins. Follow the instructions you got on the terminal after executing the install command to extract the admin password and login to your jenkins in your browser. Note the bug below in the instructions:
+2. Congratulations! You have installed your first release!  Follow the instructions you got on the terminal after executing the install command to expose and access the app in your browser. 
 
-> The following command suggested by the jenkins chart is wrong (it get internal IP not the external one)
-> `export NODE_IP=$(kubectl get nodes --namespace default -o jsonpath="{.items[0].status.addresses[0].address}")`
-> replace `addresses[0]` with `addresses[1]` to get the external IP.
+---
 
-3. Horray! you have jenkins up and running! Let's inspect what happended in the cluster:
+## Inspecting a Chart
+
+Let's inspect what happened in the cluster:
 ```
 # to list all releases deployed in the cluster
 helm list
 
+# to get the status of the release
+helm status ops-view
+
 # to get the k8s manifest(s) for a release
-helm get my-release
+helm get ops-view
 
 # to view pods, services and ingresses in the default namespace
 kubectl get pods,svc
 ```
 
-4. We installed the jenkins release with default values, now let's upgrade our release with some custom config values:
-```
-helm upgrade --set fullnameOverride=dcn-jenkins my-release stable/jenkins
-```
-The command above will change the names of the k8s resources created by this chart to `dcn-jenkins`. Check the names of the jenkins pods and services to verify that the new name is now being used. You can check all the values you could configure for the jenkins chart [here](https://github.com/kubernetes/charts/tree/master/stable/jenkins#jenkins-master).
+----
 
-> Tip: you can also create a custom values.yaml file with your customized values and use it to override the defaults:  helm install --name my-release -f my_custom_values.yaml stable/jenkins
+## Upgrading a Release
 
-5. Let's rollback our jenkins release to the first version:
+We installed the jenkins release with default values (except for RBAC), now let's upgrade our release with some custom config values:
+```
+helm upgrade --set service.type=LoadBalancer --set rbac.create=true ops-view stable/kube-ops-view 
+```
+The command above will change the service type to `LoadBalancer`.
+Watch for the new LB IP:
 
 ```
-# get the histroy of a release
-helm history my-release
-
-# rollback revision (version) number 1 of 'my-release'
-helm rollback my-release 1
+kubectl get svc -w 
+... output omitted 
+ops-view-kube-ops-view   10.63.240.137   <pending>     80:30272/TCP    23m
 ```
 
-6. Let's delete our jenkins release:
+ You can check all the values you could configure for the `kube-ops-view` chart [here](https://github.com/kubernetes/charts/blob/master/stable/kube-ops-view/values.yaml).
+
+> Tip: you can also create a custom values.yaml file with your customized values and use it to override the defaults:  helm install --name ops-view -f my_custom_values.yaml stable/kube-ops-view
+
+---
+
+## Rolling back a Release
+
+Let's rollback our ops-view release to the first version:
+
 ```
-helm delete my-release
+# get the history of a release
+helm history ops-view
+
+# rollback revision (version) number 1 of 'ops-view'
+helm rollback ops-view 1
+
+# now check the status again
+helm status ops-view
+```
+
+----
+
+## Delete a Release
+
+Let's delete our jenkins release:
+```
+helm delete ops-view
 ```
 Although the delete command removes all k8s resources created but it does not delete the release history maintained by Helm.
 
@@ -68,6 +88,22 @@ Although the delete command removes all k8s resources created but it does not de
 # list deleted releases
 helm list --deleted
 
-# purge delete 'my-release' i.e. delete its k8s resource and/or history
-helm delete --purge my-release
+# purge delete 'ops-view' i.e. delete its k8s resource and/or history
+helm delete --purge ops-view
+```
+
+----
+
+## Inspecting a chart
+Sometimes it's good to inspect what's going to be deployed in the cluster before deploying it.
+
+```
+helm inspect stable/kube-ops-view
+```
+
+For dry-run executions, we can use the `--dry-run` and `--debug` flags.
+
+```
+helm install stable/kube-ops-view --dry-run --debug 
+
 ```
