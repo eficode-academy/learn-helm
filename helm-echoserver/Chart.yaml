@@ -1,5 +1,0 @@
-apiVersion: v1
-description: helm-echoserver Demo Helm chart for DCN Oslo.
-name: helm-echoserver
-version: 0.1.0
-home: https://github.com/praqma/helm-echoserver

@@ -2,28 +2,42 @@
 # This is a YAML-formatted file.
 
 # Declare variables with default values to be passed into your templates.
-# To override them, you need to either (a) adjust this file, or (b) provide your own values file,
+# To override them, you need to either (a) adjust this file, or (b) provide your own copy of the values file,
 # which overrides the values found here.
 
-Replicas: 1
-ContainerName: helm-echoserver
+replicas: 1
+containerName: helm-echoserver
 
-Image:
+image:
   Name: "praqma/helm-echoserver"
   Tag: "1.0"
   ImagePullPolicy: "Always"
 
-ContainerPort: 8080
+containerPort: 8080
 
-EnvVars:
+envVars:
   CUSTOME_ENV_VAR1: ""
   CUSTOME_ENV_VAR2: ""
+  # pass more env vars here in the format: key: value
 
-Post_install:
+post_install:
   message: "This line is added from a post-install pod."
   delay: 30 # seconds to wait before the message is sent
 
-Service:
-  Type: NodePort
-  Port: 8888
-  Protocol: TCP
+service:
+  type: ClusterIP
+  port: 8888
+  protocol: TCP
+
+ingress:
+  enabled: false
+  annotations:
+    kubernestes.io/ingress.class: nginx
+  
+  hosts: 
+    - example.com
+    - foo.example.com
+  path: \
+  tls: 
+    enabled: false
+    secretName: my-ssl-cert-secret # this secret should exist in advance

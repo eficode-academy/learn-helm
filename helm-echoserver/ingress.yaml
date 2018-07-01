@@ -1,0 +1,35 @@
+# Ingress should only exist if ingress.enabled is true in the values file
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-name
+  labels:
+    generator: helm
+    time: deploy-time # make me dynamic
+    chart: chart-name # make me dynamic
+    version: chart-version # make me dynamic
+    release: release-name # make me dynamic
+  annotations:
+    # read annotations from user input here
+    kubernestes.io/ingress.class: nginx
+spec:
+  tls:
+    - hosts: # make me dynamic
+        - example.com
+        - foo.example.com
+      secretName: my-ssl-cert-secret # make me dynamic
+  rules: # make me dynamic
+    - host: example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: service-name # should match service name from service.yaml
+              servicePort: service-port # make me dynamic
+    - host: foo.example.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: service-name 
+              servicePort: service-port # make me dynamic          

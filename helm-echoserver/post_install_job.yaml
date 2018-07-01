@@ -1,0 +1,29 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: echo-post-install
+  labels:
+    generator: helm
+    time: deploy-time # make me dynamic
+    chart: chart-name # make me dynamic
+    version: chart-version # make me dynamic
+    release: release-name # make me dynamic
+template:
+    metadata:
+      name: post-install-pod
+    spec:
+      containers:
+      # [start of curl container]
+      - name: echo
+        image: pstauffer/curl:latest
+        imagePullPolicy: IfNotPresent
+
+        command: ["/bin/sh", "-c"]
+        args:
+        - |
+          sleep 30 # make me dynamic
+          # make the message and link below dynamic. The link format is: <service-name>.<namespace>.svc.cluster.local:<service-port>/content
+          # append a random alpha numeric string of 5 characters to end of the message. 
+          curl -F "message=POST INSTALLING MESSAGE SENT BY '${HOSTNAME}'----> i am a test message" service-name.default.svc.cluster.local:8888/content
+      restartPolicy: OnFailure
+      # [end of curl container]

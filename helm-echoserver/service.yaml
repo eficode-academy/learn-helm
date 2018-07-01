@@ -1,0 +1,26 @@
+# I (the service) must only exist if my section in the values file is NOT empty.
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-name # make me dynamic
+  labels:
+    generator: helm
+    time: deploy-time # make me dynamic
+    chart: chart-name # make me dynamic
+    version: chart-version # make me dynamic
+    release: release-name # make me dynamic
+spec:
+  ports:
+    # port is what this service should serve on, and targetPort is the port in the container.
+    - port: 8888 # make me dynamic
+      name: helm-echoserver-main 
+      targetPort: 8080 # make me dynamic
+      protocol: TCP # make me dynamic
+
+  type: ClusterIP # make me dynamic and make my default 'ClusterIP'
+  selector:
+    generator: helm
+    time: deploy-time # make me dynamic
+    chart: chart-name # make me dynamic
+    version: chart-version # make me dynamic
+    release: release-name # make me dynamic 

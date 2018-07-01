@@ -1,0 +1,74 @@
+apiVersion: apps/v1beta1  # for k8s versions after 1.9.0 use apps/v1
+kind: Deployment
+metadata:
+  name: deployment-name
+  labels:
+    generator: helm
+    time: deploy-time # make me dynamic
+    chart: chart-name # make me dynamic
+    version: chart-version # make me dynamic
+    release: release-name # make me dynamic
+spec:
+  replicas: 1    ## if I am not set, make my default 1
+  selector:
+    matchLabels:
+      generator: helm
+      time: deploy-time # make me dynamic
+      chart: chart-name # make me dynamic
+      version: chart-version # make me dynamic
+      release: release-name # make me dynamic
+  template:
+    metadata:
+      labels:
+        generator: helm
+        time: deploy-time # make me dynamic
+        chart: chart-name # make me dynamic
+        version: chart-version # make me dynamic
+        release: release-name # make me dynamic
+    spec:
+      containers:
+      # [start of helm-echoserver  container]
+      - name: echo-server # make me required
+        image: praqma/helm-echoserver:1.0 # make me dynamic
+        imagePullPolicy: Always # make my default = Always
+        ports:
+        - containerPort: 8080
+        env:
+        - name: PORT
+          value: 8080
+        - name: CUSTOME_ENV_VAR1
+          value: "I must be always lowercased. If nothing provided, set me to 'default env var 1'"
+        - name: CUSTOME_ENV_VAR2
+          value: "I must be always capitalized. If nothing provided, set me to 'default env var 2'"
+
+        # ...
+        # MAKE THE USER PROVIDE AS MANY ENV VARS AS THEY LIKE IN THE VALUES FILE AND READ THEM HERE
+
+        # exposing pod info as env variables using k8s downward API for demo purposes
+        # https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        # exposing Helm info as env variables for demo purposes
+        # see https://docs.helm.sh/chart_template_guide/#built-in-objects
+        - name: HELM_CHART_NAME
+          value: chart-name # make me dynamic
+        - name: HELM_CHART_VERSION
+          value: chart-version # make me dynamic
+        - name: HELM_RELEASE
+          value: release-name # make me dynamic        
+
+      # [end of helm-echoserver container]
