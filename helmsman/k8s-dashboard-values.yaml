@@ -11,7 +11,7 @@ nodeSelector: {}
 
 httpPort: 80
 
-serviceType: NodePort
+serviceType: ClusterIP
 serviceAnnotations: {}
   # foo.io/bar: "true"
 
@@ -51,7 +51,7 @@ ingress:
 rbac:
   ## If true, create & use RBAC resources
   #
-  create: false
+  create: true
 
   ## Ignored if rbac.create is true
   #
