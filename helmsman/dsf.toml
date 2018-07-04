@@ -63,5 +63,5 @@ description = "Wordpress CMS"
 namespace = "prod" # maps to the namespace as defined in namespaces above
 enabled = true # change to false if you want to delete this release [default is flase]
 chart = "stable/wordpress" # chart name (repo/chart)
-version = "4.9.6" # chart version
+version = "2.1.0" # chart version
 valuesFile = ""  # leaving it empty uses the default chart values
