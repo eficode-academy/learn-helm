@@ -1,0 +1,44 @@
+version: 2
+jobs:
+
+    plan-deployment:
+      docker:
+        - image: praqma/helmsman:v1.2.0-helm-v2.8.1
+      working_directory: ~/repo  
+      steps:
+        - checkout
+        - run:
+            name: Helmsman plan
+            command: |
+              helmsman -debug -f helmsman/dsf.toml
+    deploy-to-cluster:
+      docker:
+        - image: praqma/helmsman:v1.2.0-helm-v2.8.1
+      working_directory: ~/repo
+      steps:
+        - checkout
+        - run:
+            name: Helmsman deploy apps 
+            command: |
+              helmsman -debug -apply -f helmsman/dsf.toml
+workflows:
+  version: 2
+  plan-approve-and-deploy:
+    jobs:
+      - plan-deployment:
+          filters:
+            branches:
+              only: helmsman
+      - hold-before-deploying-apps:
+          type: approval
+          requires:
+            - plan-deployment
+          filters:
+            branches:
+              only: helmsman
+      - deploy-to-cluster:
+          requires:
+            - hold-before-deploying-apps
+          filters:
+            branches:
+              only: helmsman
