@@ -12,6 +12,7 @@ kubeContext = "demo-cluster"
 username = "admin"
 password = "$K8S_PASSWORD" # the name of an environment variable containing the k8s password
 clusterURI = "$K8S_URI" # cluster API
+serviceAccount = "tiller"
 
 
 # define your k8s namespaces. If they don't exist, helmsman will attempt to create them
@@ -20,12 +21,16 @@ clusterURI = "$K8S_URI" # cluster API
 
 [namespaces.dev]
 installTiller = true
+tillerServiceAccount = "dev-tiller"
+
 [namespaces.test]
 installTiller = true
+tillerServiceAccount = "test-tiller"
 
 [namespaces.prod]
 protected = true
 installTiller = true
+tillerServiceAccount = "prod-tiller"
 caCert = "gs://helm-tls/ca.cert.pem"
 tillerCert = "gs://helm-tls/tiller.cert.pem"
 tillerKey = "gs://helm-tls/tiller.key.pem"
