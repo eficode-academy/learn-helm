@@ -63,13 +63,6 @@ Now that you have the client installed, it's time to install the `Tiller` (Helm'
 - If RBAC is enabled in your cluster, Tiller needs an appropriate service account.
 - Where should Tiller store it's state? By default, it uses `configMaps` as a **storage backend** but a `secrets` option is available.
 
-<!-- 1.1 Create a service account for Tiller.
-
-```
-kubectl create serviceaccount -n kube-system tiller
-kubectl create clusterrolebinding tiller-binding --clusterrole=cluster-admin --serviceaccount kube-system:tiller 
-
-``` -->
 
 1.1 Initialize Helm on the server (cluster) side using the service account we created above: 
 
@@ -79,12 +72,6 @@ kubectl create clusterrolebinding tiller-binding --clusterrole=cluster-admin --s
 helm init  --service-account user-x-sa --tiller-namespace <your-namespace>
 
 ``` 
-
-<!-- > Production Tip: If you want to configure the storage backend to be secrets, you can use the `--override` flag 
-
-```
-helm init --service-account tiller --override 'spec.template.spec.containers[0].command'='{/tiller,--storage=secret}'
-``` -->
 
 
 1.2 Verify Tiller is deployed 
@@ -104,19 +91,3 @@ kubectl describe pod -n <your-namespace> <tiller-deploy-full-pod-name>
 # inspect Tiller logs 
 kubectl logs -n <your-namespace> <tiller-deploy-full-pod-name>
 ```
-<!-- ----
-## Upgrading Tiller
-
-If we want to upgrade Tiller's version to match the local Helm client:
-
-```
-helm init --upgrade 
-```
-
-----
-## Uninstalling Tiller
-
-``` 
-helm reset --force
-``` 
-> This does not delete any helm releases. Only deletes Tiller. -->

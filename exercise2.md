@@ -89,19 +89,3 @@ helm list --deleted --tiller-namespace <your-namespace>
 # purge delete 'tomcat' i.e. delete its k8s resource and/or history
 helm delete --purge tomcat
 ```
-
-<!-- ----
-
-## Inspecting a chart
-Sometimes it's good to inspect what's going to be deployed in the cluster before deploying it.
-
-```
-helm inspect stable/kube-ops-view
-```
-
-For dry-run executions, we can use the `--dry-run` and `--debug` flags.
-
-```
-helm install stable/kube-ops-view --dry-run --debug 
-
-``` -->
