@@ -4,11 +4,7 @@ kind: Ingress
 metadata:
   name: ingress-name
   labels:
-    generator: helm
-    time: deploy-time # make me dynamic
-    chart: chart-name # make me dynamic
-    version: chart-version # make me dynamic
-    release: release-name # make me dynamic
+    app: echoserver
   annotations:
     # read annotations from user input here
     kubernestes.io/ingress.class: nginx

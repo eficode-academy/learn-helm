@@ -3,11 +3,7 @@ kind: Job
 metadata:
   name: echo-post-install
   labels:
-    generator: helm
-    time: deploy-time # make me dynamic
-    chart: chart-name # make me dynamic
-    version: chart-version # make me dynamic
-    release: release-name # make me dynamic
+    app: echoserver
 template:
     metadata:
       name: post-install-pod

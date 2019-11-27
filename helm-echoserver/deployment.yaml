@@ -1,30 +1,18 @@
-apiVersion: apps/v1beta1  # for k8s versions after 1.9.0 use apps/v1
+apiVersion: apps/v1 
 kind: Deployment
 metadata:
-  name: deployment-name
+  name: deployment-name # make me dynamic
   labels:
-    generator: helm
-    time: deploy-time # make me dynamic
-    chart: chart-name # make me dynamic
-    version: chart-version # make me dynamic
-    release: release-name # make me dynamic
+    app: echoserver
 spec:
   replicas: 1    ## if I am not set, make my default 1
   selector:
     matchLabels:
-      generator: helm
-      time: deploy-time # make me dynamic
-      chart: chart-name # make me dynamic
-      version: chart-version # make me dynamic
-      release: release-name # make me dynamic
+      app: echoserver
   template:
     metadata:
       labels:
-        generator: helm
-        time: deploy-time # make me dynamic
-        chart: chart-name # make me dynamic
-        version: chart-version # make me dynamic
-        release: release-name # make me dynamic
+        app: echoserver
     spec:
       containers:
       # [start of helm-echoserver  container]
@@ -37,9 +25,9 @@ spec:
         - name: PORT
           value: 8080
         - name: CUSTOME_ENV_VAR1
-          value: "I must be always lowercased. If nothing provided, set me to 'default env var 1'"
+          value: "env var 1'"
         - name: CUSTOME_ENV_VAR2
-          value: "I must be always capitalized. If nothing provided, set me to 'default env var 2'"
+          value: "env var 2'"
 
         # ...
         # MAKE THE USER PROVIDE AS MANY ENV VARS AS THEY LIKE IN THE VALUES FILE AND READ THEM HERE

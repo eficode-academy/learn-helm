@@ -5,19 +5,22 @@
 # To override them, you need to either (a) adjust this file, or (b) provide your own copy of the values file,
 # which overrides the values found here.
 
-replicas: 1
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 1
 containerName: helm-echoserver
 
 image:
-  Name: "praqma/helm-echoserver"
-  Tag: "1.0"
-  ImagePullPolicy: "Always"
+  repository: "praqma/helm-echoserver"
+  tag: "1.0"
+  pullPolicy: "Always"
 
 containerPort: 8080
 
 envVars:
-  CUSTOME_ENV_VAR1: ""
-  CUSTOME_ENV_VAR2: ""
+  CUSTOME_ENV_VAR1: "env var1"
+  CUSTOME_ENV_VAR2: "env var2"
   # pass more env vars here in the format: key: value
 
 post_install:
@@ -31,13 +34,33 @@ service:
 
 ingress:
   enabled: false
-  annotations:
-    kubernestes.io/ingress.class: nginx
-  
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"  
   hosts: 
     - example.com
     - foo.example.com
-  path: \
-  tls: 
-    enabled: false
-    secretName: my-ssl-cert-secret # this secret should exist in advance
+  paths: []
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}    
