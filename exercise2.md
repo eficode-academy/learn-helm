@@ -87,5 +87,5 @@ Although the delete command removes all k8s resources created but it does not de
 helm list --deleted --tiller-namespace <your-namespace>
 
 # purge delete 'tomcat' i.e. delete its k8s resource and/or history
-helm delete --purge tomcat
+helm delete --purge tomcat --tiller-namespace <your-namespace>
 ```
